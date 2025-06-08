@@ -1,12 +1,11 @@
-# hello-healthy-script-generator/main.py
-
 import os
 import openai
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 
-# 🔑 OpenAI API Key
-openai.api_key = "YOUR_API_KEY_HERE"
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # ✅ 자동 주제 생성 함수
 def generate_topics():
@@ -30,7 +29,7 @@ def generate_topics():
 그런 주제 4개만 깔끔하게 리스트로 줘.
     '''
     res = openai.ChatCompletion.create(
-        model="gpt-4o",
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.8
     )
@@ -118,15 +117,13 @@ def generate_script(topic, paper_title):
 너는 지금부터 **헬로헬씨(Hello Healthy)** 콘텐츠의 세계관에 맞는 스크립트를 작성하는 작가야.  
 한 편당 길이는 약 90초 분량으로 작성하고, 시청자에게 “아, 이거 나도 해봐야겠다”는 느낌이 들게 만드는 게 핵심이야.
 """
-
     user_prompt = f"""
 주제: {topic}
 
 논문 제목: {paper_title} (괄호로 간단히 넣어줘)
 """
-
     res = openai.ChatCompletion.create(
-        model="gpt-4o",
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
@@ -155,3 +152,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
